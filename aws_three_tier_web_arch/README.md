@@ -4,6 +4,6 @@ This is a project from the AWS Workshop Studio. The objective of the project is 
 
 The project is split into seven parts and will give builders hands-on experience with VPCs, subnets, security groups, database deployment, load balancing and autoscaling.
 
-The reference architecture can be seen below. I recreated this using the Lucidchart App - ![lucidchart](https://www.lucidchart.com);
+The reference architecture can be seen below. I recreated this using the Lucidchart App - [lucidchart](https://www.lucidchart.com);
 
 ![jpeg of three tier web architecture.](./3twba.jpeg)
