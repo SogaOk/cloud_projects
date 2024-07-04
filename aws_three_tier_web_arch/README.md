@@ -59,3 +59,33 @@ It is important here to use a naming convention that will allow you to easily id
 So now I have 3 subnets each across two availability zones.
 
 ![subnets created](./imgs/create_subnet3.JPG)
+
+Now we move on to configure internet access for ur public subnets by creating an internet gateway and attaching it to our VPC. I move to Internet gateways on my VPC Dashboard and click on the Create internet gateway button.
+
+![create IGW](./imgs/create_igw1.JPG)
+
+I provide a suitable name for my internet gateway and create it.
+
+![name and create IGW](./imgs/create_igw2.JPG)
+
+The next step is to attach the internet gateway to our VPC. This can be done immediately after the internet gateway is created using the Attach to VPC button or from the Actions drop down selection.
+
+![attach IGW to VPC](./imgs/igw_attach_vpc.JPG)
+
+I select my VPC from the dialog box and complete the attachment.
+
+![complete IGW attach to VPC](./imgs/igw_attach_vpc2.JPG)
+
+Now we move on to configure internet access for our private subnets, to allow our app tier to access the internet. To make our architecture highly available, we will deploy one NAT gateway in each public subnet. To get this done I navigate to NAT gateways on my VPC dashboard.
+
+![create NAT gateway](./imgs/create_natgw1.JPG)
+
+I click on the create NAT gateway button and provide a suitable name for the NAT gateway. I select one of the public subnets created earlier and use the Allocate Elastic IP button to allocate a public IP address to the NAT gateway. 
+
+![provide NAT gw details](./imgs/create_natgw2.JPG)
+
+I repeat this process for the other public subnet. I now have two NAT gateways provisioned. 
+
+![NAT gateways provisioned](./imgs/create_natgw3.JPG)
+
+Public IP addresses are billed by AWS so keep this in mind to avoid any surprise costs. You can estimate the cost of your public IPs using the aws pricing calculator [here](https://calculator.aws/#/createCalculator/VPC)
