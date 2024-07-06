@@ -89,3 +89,37 @@ I repeat this process for the other public subnet. I now have two NAT gateways p
 ![NAT gateways provisioned](./imgs/create_natgw3.JPG)
 
 Public IP addresses are billed by AWS so keep this in mind to avoid any surprise costs. You can estimate the cost of your public IPs using the aws pricing calculator [here](https://calculator.aws/#/createCalculator/VPC)
+
+Now we move on to configure our route tables to direct the traffice within our subnets. We will start with a route table for our public subnet
+
+From the VPC dashboard I select Route tables from the left hand menu and use the Create route table button
+
+![create route table](./imgs/create_rt1.JPG)
+
+I provide an appropriate name for the route table and select our custom VPC.
+
+![route table details](./imgs/create_rt2.JPG)
+
+Now we need to update the routes in our route table. I select the new route table and move to the routes tab. Then I click the Edit routes button.
+
+![update routes](./imgs/edit_routes1.JPG)
+
+Here we will add a route to direct traffic from the VPC to the internet gateway.
+
+![add route](./imgs/edit_routes2.JPG)
+
+Now we will associate the route table with the two public subnets in our VPC. I move to the subnet associations tab and Edit subnet associations.
+
+![edit subnet associations](./imgs/subnet_assoc1.JPG)
+
+Here I select the two public subnets in our custom VPC and save associations. 
+
+![save association](./imgs/subnet_assoc3.JPG)
+
+We will repeat this process to create a route table for each private subnet in our app tier. These will direct traffic from our app tier to the NAT gateways we created earlier.
+
+![private route table](./imgs/private_rt1.JPG)
+
+![private route table edit routes](./imgs/private_rt1a.JPG)
+
+![private route table subnet assoc.](./imgs/private_rt1b.JPG)
