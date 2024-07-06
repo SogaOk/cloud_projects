@@ -80,11 +80,11 @@ Now we move on to configure internet access for our private subnets, to allow ou
 
 ![create NAT gateway](./imgs/create_natgw1.JPG)
 
-I click on the create NAT gateway button and provide a suitable name for the NAT gateway. I select one of the public subnets created earlier and use the Allocate Elastic IP button to allocate a public IP address to the NAT gateway. 
+I click on the create NAT gateway button and provide a suitable name for the NAT gateway. I select one of the public subnets created earlier and use the Allocate Elastic IP button to allocate a public IP address to the NAT gateway.
 
 ![provide NAT gw details](./imgs/create_natgw2.JPG)
 
-I repeat this process for the other public subnet. I now have two NAT gateways provisioned. 
+I repeat this process for the other public subnet. I now have two NAT gateways provisioned.
 
 ![NAT gateways provisioned](./imgs/create_natgw3.JPG)
 
@@ -112,7 +112,7 @@ Now we will associate the route table with the two public subnets in our VPC. I 
 
 ![edit subnet associations](./imgs/subnet_assoc1.JPG)
 
-Here I select the two public subnets in our custom VPC and save associations. 
+Here I select the two public subnets in our custom VPC and save associations.
 
 ![save association](./imgs/subnet_assoc3.JPG)
 
@@ -123,3 +123,27 @@ We will repeat this process to create a route table for each private subnet in o
 ![private route table edit routes](./imgs/private_rt1a.JPG)
 
 ![private route table subnet assoc.](./imgs/private_rt1b.JPG)
+
+It's time to create our security groups. I will stress again here that your naming convention will be very important so that you don't get confused later on in the projects. Name your security groups as explicitly as possible. From the VPC dashboard I navigate to Security Groups on the left side menu and click on the Create security group button. Security groups will help us control traffic to the resources in our subnets.
+
+![create sg](./imgs/create_sec_grp1.JPG)
+
+Our first security group is for our internet-facing load balancer. I name the security group appropriately and select our custom VPC. I will add an inbound rule to allow HTTP traffic from my IP address. 
+
+![create sg add rule](./imgs/create_sec_grp2.JPG)
+
+The second security group is for our the instances we will launch in our web tier. We want traffic to the web servers on these instances to come from our internet-facing load balancer. To do this we will add a rule that allows HTTP traffic and select the source as the internet-facing load balancer security group we just created in the previous step. I will also allow HTTP access from my IP so that I can access the instance when we test our setup.
+
+![create sg web tier](./imgs/create_sec_grp_webtier.JPG)
+
+The third security group will be for our internal load balancer. This will allow traffic from our web tier instances to get to our internal load balancer via our web tier security group. 
+
+![create sg internal lb](./imgs/create_sec_grp_internallb.JPG)
+
+The fourth security group will be for our private instances. Our app tier will reside here and we want to allow traffic from our internal load balancer to our app tier. The inbound rule will allow TCP traffic on port 4000 via the internal load balancer security group. We will add another rule to allow traffic TCP traffic on port 4000 from my IP.
+
+![create sg app tier](./imgs/create_sec_grp_apptier.JPG)
+
+The fifth and final security group will be for our database tier. This will allow traffic from our private instances to our MySQL/Aurora database. The inbound rule will allow traffic on port 3306 from the private instance security group.
+
+![create db sg](./imgs/create_sec_grp_db.JPG)
