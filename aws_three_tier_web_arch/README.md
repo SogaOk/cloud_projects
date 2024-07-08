@@ -147,3 +147,44 @@ The fourth security group will be for our private instances. Our app tier will r
 The fifth and final security group will be for our database tier. This will allow traffic from our private instances to our MySQL/Aurora database. The inbound rule will allow traffic on port 3306 from the private instance security group.
 
 ![create db sg](./imgs/create_sec_grp_db.JPG)
+
+## Database Deployment
+Next we move on to deploy the database layer for our architecture. To do this I navigate to the RDS dashboard in our AWS account. Once on the RDS dashboard, navigate to Subnet groups on the left-side menu and use the Create DB subnet group button.
+
+![create db subnet group](./imgs/create_db_subnetgrp.JPG)
+
+Here we provide a name and description for our subnet group and select our custom VPC. Then we select availability zones and the subnets we created for our database layer. We can confirm that we are selecting the right subnets by navigating to our VPC dashboard and viewing the subnet IDs. Once the right selections have been made we click the create button
+
+![create db subnet group deets](./imgs/create_db_subnetgrp2.JPG)
+
+Now we navigate to Databases on our RDS dashboard and click the create database button.
+
+![create db step 1](./imgs/create_db.JPG)
+
+There are several configuration steps to complete here. We choose the Standard create method and select the Aurora(MySQL Compatible) Engine option.
+
+![create db step 2](./imgs/create_db2.JPG)
+
+Under the Templates section we select Dev/Test since this is not a production database. Here we will need to provide a username and password which we will note down as we will be using them to access our database later on.
+
+![create db step 3](./imgs/create_db3.JPG)
+
+Under the Instance configuration section, the memory optimized classes are selected by default. These are large instance so for the purpose of this project I selected the burstable classes option and left  the default db.t3.medium instance.
+
+![create db step 4](./imgs/create_db4.JPG)
+
+Under the availability and durability section we choose the option to create an Aurora Replica. We leave the defaults in the connectivity section and select our custom VPC and the security group we created previously for our database tier.
+
+![create db step 5](./imgs/create_db5.JPG)
+
+![create db step 6](./imgs/create_db6.JPG)
+
+Under the additional configuration, provide a database name, leave all other defaults configurations as is and create the database.
+
+![create db step 7](./imgs/create_db7.JPG)
+
+![create db step 8](./imgs/create_db8.JPG)
+
+Once the databse is provisioned, there will be a reader instance and a writer instance in the database subnets of each availability zone. We will note the writer endpoint down for later use.
+
+![database endpoints](./imgs/database_endpoints.JPG)
