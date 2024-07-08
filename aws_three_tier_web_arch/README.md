@@ -128,7 +128,7 @@ It's time to create our security groups. I will stress again here that your nami
 
 ![create sg](./imgs/create_sec_grp1.JPG)
 
-Our first security group is for our internet-facing load balancer. I name the security group appropriately and select our custom VPC. I will add an inbound rule to allow HTTP traffic from my IP address. 
+Our first security group is for our internet-facing load balancer. I name the security group appropriately and select our custom VPC. I will add an inbound rule to allow HTTP traffic from my IP address.
 
 ![create sg add rule](./imgs/create_sec_grp2.JPG)
 
@@ -136,7 +136,7 @@ The second security group is for our the instances we will launch in our web tie
 
 ![create sg web tier](./imgs/create_sec_grp_webtier.JPG)
 
-The third security group will be for our internal load balancer. This will allow traffic from our web tier instances to get to our internal load balancer via our web tier security group. 
+The third security group will be for our internal load balancer. This will allow traffic from our web tier instances to get to our internal load balancer via our web tier security group.
 
 ![create sg internal lb](./imgs/create_sec_grp_internallb.JPG)
 
@@ -149,6 +149,7 @@ The fifth and final security group will be for our database tier. This will allo
 ![create db sg](./imgs/create_sec_grp_db.JPG)
 
 ## Database Deployment
+
 Next we move on to deploy the database layer for our architecture. To do this I navigate to the RDS dashboard in our AWS account. Once on the RDS dashboard, navigate to Subnet groups on the left-side menu and use the Create DB subnet group button.
 
 ![create db subnet group](./imgs/create_db_subnetgrp.JPG)
@@ -169,7 +170,7 @@ Under the Templates section we select Dev/Test since this is not a production da
 
 ![create db step 3](./imgs/create_db3.JPG)
 
-Under the Instance configuration section, the memory optimized classes are selected by default. These are large instance so for the purpose of this project I selected the burstable classes option and left  the default db.t3.medium instance.
+Under the Instance configuration section, the memory optimized classes are selected by default. These are large instance so for the purpose of this project I selected the burstable classes option and left the default db.t3.medium instance.
 
 ![create db step 4](./imgs/create_db4.JPG)
 
@@ -188,3 +189,96 @@ Under the additional configuration, provide a database name, leave all other def
 Once the databse is provisioned, there will be a reader instance and a writer instance in the database subnets of each availability zone. We will note the writer endpoint down for later use.
 
 ![database endpoints](./imgs/database_endpoints.JPG)
+
+## App Tier Deployment
+
+Here I am creating and configuring the EC2 instance for the app layer of our architecture. A Node.js application will run on port 4000 on our app layer. We will also add some data and tables to our database.
+
+We navigate to instances on the EC2 dashboard and Launch instances.
+
+![launch instance](./imgs/launch_instance.JPG)
+
+The instance will be configured as follows;
+
+ - name the instance appropriately
+ - use the default Amazon Linux 2023 AMi
+ - use the default t2.micro instance type
+ - under Key pair login select the Proceed without keypair option
+ - under Network setting click on the edit button
+    - Select the custom VPC, one of the private subnets we created for the app layer and the IAM role we created.
+    - Auto assign public IP should have Disable as value.
+    - use the Select existing security group option and select the app tier security group we created earlier.
+ - leave the default storage values.
+ - under advanced details
+    - select the instance role we created earlier. 
+
+Leave all other options as default and launch the instance.
+
+![launch instance 1](./imgs/launch_instance1.JPG)
+
+![launch instance 2](./imgs/launch_instance2.JPG)
+
+![launch instance 3](./imgs/launch_instance3.JPG)
+
+![launch instance 4](./imgs/launch_instance4.JPG)
+
+ Back on the EC2 dashboard, we can see the new instance. It will take a few minutes to get into a running state and pass status checks. Our next step is to connect to the instance. To do this select the checkmark box beside the instance and click on the Connect button, or right-click on the instance name and select connect from the options that appear.
+
+![instance connect](./imgs/instance_connect.JPG)
+
+Select the Session Manager tab and click Connect
+
+![session manager](./imgs/instance_connect2.JPG)
+
+A terminal will open up in a seperate window and we will be logged in as ssm-user. We switch to ec2-user by using the sudo -su ec2-user command.
+
+![switch to ec2-user](./imgs/instance_connect3.JPG)
+
+We can confirm that the instance in our private subnet is able to reach the internet via the NAT gateways by pinging any common DNS server domain name/IP address such as google.com/8.8.8.8. We should get a successful transmission of packets if our network has been configured correctly.
+
+![ping google](./imgs/instance_connect_ping.JPG)
+
+Now we move on to configure the database. We start by downloading the MySQL CLI. The workshop instructions provided here gave me an error, I believe they were using a previous version of the Amazon Linux AMI.
+
+![mysql download error](./imgs/mysql_download_error.JPG)
+
+I used a google search to find the amazon documentation for the installation [here](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html#CHAP_GettingStarted.Connecting.MySQL). You can install the MySQL CLI client from MariaDB.
+
+![install mariadb](./imgs/mariadb_install.JPG)
+
+From here it's time to initiate our DB connection with our Aurora RDS writer endpoint. The following command is provided - mysql -h CHANGE-TO-YOUR-RDS-ENDPOINT -u CHANGE-TO-USER-NAME -p. Enter your password when prompted.
+
+![connect to database](./imgs/connect_AuroraRDS.JPG)
+
+Next step we create a database called webappdb using the command as shown.
+
+![create webappdb](./imgs/create_webappdb.JPG)
+
+Verify that the database was created using the SHOW DATABASES command.
+
+![show databases webappdb](./imgs/show_databases.JPG)
+
+Now we will navigate to the database we just created and create a table where we will insert some data, using the following commands.
+
+- USE webappdb;    
+- CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL
+AUTO_INCREMENT, amount DECIMAL(10,2), description
+VARCHAR(100), PRIMARY KEY(id));    
+
+We can verify that the table was created using the SHOW TABLES; command.
+
+![use webappdb and create table](./imgs/show_webappdb_table.JPG)
+
+Next we want to insert data into our table with the following command - INSERT INTO transactions (amount,description) VALUES ('400','groceries');   
+
+We can verify the data was added to our table by using the following command - SELECT * FROM transactions;
+
+![insert into table and confirm](./imgs/select_from_table.JPG) 
+
+We can exit the database now using the exit command.
+
+![exit database](./imgs/exit_db.JPG)
+
+
+
+
