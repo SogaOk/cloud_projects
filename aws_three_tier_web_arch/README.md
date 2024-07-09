@@ -279,6 +279,55 @@ We can exit the database now using the exit command.
 
 ![exit database](./imgs/exit_db.JPG)
 
+### Configure App Instance
+For this section of our project, I will first update the database credentials for the app tier. This file is part of the code downloaded from the github repo for this project.
+
+![update dbconfig](./imgs/update_dbconfig.JPG)
+
+This is not best practice but will suffice for this project.
+
+Now I upload the app-tier folder to the S3 bucket I created during the initial set-up for this project.
+
+![upload code to s3](./imgs/s3_upload.JPG)
+
+![upload folder to s3](./imgs/s3_upload2.JPG)
+
+The next step is to install all the components needed to run our backend application. From our Session Manager session, we will perform the following steps;
+ - install NVM (node version manager)
+
+ ![install nvm](./imgs/install_nvm.JPG)
+
+ - install a compatible version of Node.js and confirm it is in use
+
+ ![install nodejs](./imgs/install_nodejs.JPG)
+
+ - install PM2, a daemon process manager that will keep the node.js app running when we exit the instance or reboot it.
+
+ ![install pm2](./imgs/install_pm2.JPG)
+
+Now we will download our code from the S3 bucket onto our instance.
+
+![download code from s3](./imgs/download_s3.JPG)
+
+After the download is complete, I navigate to the app-tier directory, install the dependencies and start the app
+
+![start pm2 app](./imgs/pm2_startup.JPG)
+
+A status of online confirms that the app is running.
+
+![pm2 startup status](./imgs/start_pm2_app2.JPG)
+
+We need to make sure our app restarts and keeps running in the event the server is interrupted for any reason. To accomplish this we will run the pm2 startup command. 
+
+![pm2 startup](./imgs/pm2_startup.JPG)
+
+Copy and paste the command in the output that is displayed on the terminal.
+
+![pm2 startup](./imgs/pm2_startup_output.JPG)
+
+After running this command, save the current list of node processes with the following command - pm2 save
+
+![pm2 save](./imgs/pm2_save.JPG)
 
 
 
