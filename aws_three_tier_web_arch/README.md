@@ -396,3 +396,27 @@ Leave the other options as default and create the load balancer
 ![create lb](./imgs/create_lb5.JPG)
 
 ![lb created](./imgs/create_lb6.JPG)
+
+### Launch Template
+Next we need to create a Launch Template that we will use with our Autoscaling group. On our EC2 dashboard we select Launch Template from the left side menu.
+
+![create launch template](./imgs/create_lt.JPG)
+
+The launch template will have the following configurations;
+  - Provide an appropriate name for the launch template. 
+
+![create lt 1](./imgs/create_lt1.JPG)
+
+  - Under the Application and OS Images, select the My AMIs tab and the app tier image we created earlier. Select the t2.micro instance type.
+
+![create lt 2](./imgs/create_lt2.JPG)
+  
+  - leave the key pair default as we will not be needing a key pair to access our instances. Select the app tier security group.
+
+![create lt 3](./imgs/create_lt3.JPG)
+
+  - under Advanced details select the IAM instance role we used with our EC2 instance. Leave all other values as default and create the launch template
+
+![create lt 4](./imgs/create_lt4.JPG)
+
+
