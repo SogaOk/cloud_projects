@@ -358,3 +358,41 @@ Provide an appropriate name for the image and click Create image.
 We can find the new image by navigating to AMIs under Images in the left-side menu of our EC2 dashboard.
 
 ![ami](./imgs/ami_image.JPG)
+
+### Target Group
+Next we want to create our target group which we will use in conjunction with our load balancer. The target group is group of resources ( in this case our app tier instances) that the load balancer directs incoming traffic to. Navigate to the left hand menu on our EC2 dashboard again and towards the bottom select Target Groups and use the Create target group button.
+
+![create target group](./imgs/create_tg.JPG)
+
+For the basic configuration maintain the default target type of Instances. Give the target group an appropriate name and leave the default Protocol:Port option of HTTP:80. Select the custom VPC and update the health check path to /health. Click the Next button
+
+![target group config](./imgs/create_tg1.JPG)
+
+![target group config 2](./imgs/create_tg2.JPG)
+
+We will not register any targets yet so I click on the Create target group button.
+
+![complete target group](./imgs/create_tg3.JPG)
+
+### Internal Load Balancer
+To create our load balancer we navigate again to the left had side of our EC2 dashboard and select Load Balancers. Click on the Create load balancer button.
+
+![create load balancer](./imgs/create_lb.JPG)
+
+Here we select the create button for the Application Load Balancer as that is the type we will be using.
+
+![select alb](./imgs/create_lb2.JPG)
+
+For the Basic configuration, provide a load balancer name and select the Internal option under Scheme. Under Network mapping select our custom VPC
+
+![lb config](./imgs/create_lb3.JPG)
+
+Select the availability zones and private subnets for the app tier. Select the security group we created for the internal load balancer. The load balancer will be listening for HTTP traffic on port 80. Select the target group we just created, this is where the load balancer will forward traffic to. 
+
+![lb config 2](./imgs/create_lb4.JPG)
+
+Leave the other options as default and create the load balancer
+
+![create lb](./imgs/create_lb5.JPG)
+
+![lb created](./imgs/create_lb6.JPG)
