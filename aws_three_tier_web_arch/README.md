@@ -344,3 +344,17 @@ Next we can test the database connection by hitting the following endpoint local
 ![test transaction endpoint](./imgs/transaction_endpoint.JPG)
 
 This will return the data we added to our database earlier. These responses show that our app layer is fully configured.
+
+## Internal Load Balancing & Autoscaling
+Our first step here is to create an AMI (Amazon Machine Image) of our 
+app tier instance. This is basically an image of our instance that we can use to lauch new instances that will have exactly the same configuration as our running instance. To get this done, on my EC2 dashboard I select the app tier instanceand under the Actions drop-down options I select Image and templates and Create Image.
+
+![create AMI](./imgs/create_ami.JPG)
+
+Provide an appropriate name for the image and click Create image.
+
+![create AMI details](./imgs/create_ami2.JPG)
+
+We can find the new image by navigating to AMIs under Images in the left-side menu of our EC2 dashboard.
+
+![ami](./imgs/ami_image.JPG)
