@@ -200,17 +200,17 @@ We navigate to instances on the EC2 dashboard and Launch instances.
 
 The instance will be configured as follows;
 
- - name the instance appropriately
- - use the default Amazon Linux 2023 AMi
- - use the default t2.micro instance type
- - under Key pair login select the Proceed without keypair option
- - under Network setting click on the edit button
-    - Select the custom VPC, one of the private subnets we created for the app layer and the IAM role we created.
-    - Auto assign public IP should have Disable as value.
-    - use the Select existing security group option and select the app tier security group we created earlier.
- - leave the default storage values.
- - under advanced details
-    - select the instance role we created earlier. 
+- name the instance appropriately
+- use the default Amazon Linux 2023 AMi
+- use the default t2.micro instance type
+- under Key pair login select the Proceed without keypair option
+- under Network setting click on the edit button
+  - Select the custom VPC, one of the private subnets we created for the app layer and the IAM role we created.
+  - Auto assign public IP should have Disable as value.
+  - use the Select existing security group option and select the app tier security group we created earlier.
+- leave the default storage values.
+- under advanced details
+  - select the instance role we created earlier.
 
 Leave all other options as default and launch the instance.
 
@@ -222,7 +222,7 @@ Leave all other options as default and launch the instance.
 
 ![launch instance 4](./imgs/launch_instance4.JPG)
 
- Back on the EC2 dashboard, we can see the new instance. It will take a few minutes to get into a running state and pass status checks. Our next step is to connect to the instance. To do this select the checkmark box beside the instance and click on the Connect button, or right-click on the instance name and select connect from the options that appear.
+Back on the EC2 dashboard, we can see the new instance. It will take a few minutes to get into a running state and pass status checks. Our next step is to connect to the instance. To do this select the checkmark box beside the instance and click on the Connect button, or right-click on the instance name and select connect from the options that appear.
 
 ![instance connect](./imgs/instance_connect.JPG)
 
@@ -260,26 +260,27 @@ Verify that the database was created using the SHOW DATABASES command.
 
 Now we will navigate to the database we just created and create a table where we will insert some data, using the following commands.
 
-- USE webappdb;    
+- USE webappdb;
 - CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL
-AUTO_INCREMENT, amount DECIMAL(10,2), description
-VARCHAR(100), PRIMARY KEY(id));    
+  AUTO_INCREMENT, amount DECIMAL(10,2), description
+  VARCHAR(100), PRIMARY KEY(id));
 
 We can verify that the table was created using the SHOW TABLES; command.
 
 ![use webappdb and create table](./imgs/show_webappdb_table.JPG)
 
-Next we want to insert data into our table with the following command - INSERT INTO transactions (amount,description) VALUES ('400','groceries');   
+Next we want to insert data into our table with the following command - INSERT INTO transactions (amount,description) VALUES ('400','groceries');
 
-We can verify the data was added to our table by using the following command - SELECT * FROM transactions;
+We can verify the data was added to our table by using the following command - SELECT \* FROM transactions;
 
-![insert into table and confirm](./imgs/select_from_table.JPG) 
+![insert into table and confirm](./imgs/select_from_table.JPG)
 
 We can exit the database now using the exit command.
 
 ![exit database](./imgs/exit_db.JPG)
 
 ### Configure App Instance
+
 For this section of our project, I will first update the database credentials for the app tier. This file is part of the code downloaded from the github repo for this project.
 
 ![update dbconfig](./imgs/update_dbconfig.JPG)
@@ -293,17 +294,18 @@ Now I upload the app-tier folder to the S3 bucket I created during the initial s
 ![upload folder to s3](./imgs/s3_upload2.JPG)
 
 The next step is to install all the components needed to run our backend application. From our Session Manager session, we will perform the following steps;
- - install NVM (node version manager)
 
- ![install nvm](./imgs/install_nvm.JPG)
+- install NVM (node version manager)
 
- - install a compatible version of Node.js and confirm it is in use
+![install nvm](./imgs/install_nvm.JPG)
 
- ![install nodejs](./imgs/install_nodejs.JPG)
+- install a compatible version of Node.js and confirm it is in use
 
- - install PM2, a daemon process manager that will keep the node.js app running when we exit the instance or reboot it.
+![install nodejs](./imgs/install_nodejs.JPG)
 
- ![install pm2](./imgs/install_pm2.JPG)
+- install PM2, a daemon process manager that will keep the node.js app running when we exit the instance or reboot it.
+
+![install pm2](./imgs/install_pm2.JPG)
 
 Now we will download our code from the S3 bucket onto our instance.
 
@@ -317,7 +319,7 @@ A status of online confirms that the app is running.
 
 ![pm2 startup status](./imgs/start_pm2_app2.JPG)
 
-We need to make sure our app restarts and keeps running in the event the server is interrupted for any reason. To accomplish this we will run the pm2 startup command. 
+We need to make sure our app restarts and keeps running in the event the server is interrupted for any reason. To accomplish this we will run the pm2 startup command.
 
 ![pm2 startup](./imgs/pm2_startup.JPG)
 
@@ -329,5 +331,16 @@ After running this command, save the current list of node processes with the fol
 
 ![pm2 save](./imgs/pm2_save.JPG)
 
+### Test App Tier
 
+Now we will run a few tests to check that our app is properly configured and can retrieve data from the database. Our first command will test our health check endpoint, which will tell us if the app is running. We will use the following command - curl http://localhost:4000/health
 
+![test health check](./imgs/healthcheck_endpoint.JPG)
+
+This will return a response "This is the health check" as seen above.
+
+Next we can test the database connection by hitting the following endpoint locally using this command - curl http://localhost:4000/transaction
+
+![test transaction endpoint](./imgs/transaction_endpoint.JPG)
+
+This will return the data we added to our database earlier. These responses show that our app layer is fully configured.
