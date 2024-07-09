@@ -346,7 +346,8 @@ Next we can test the database connection by hitting the following endpoint local
 This will return the data we added to our database earlier. These responses show that our app layer is fully configured.
 
 ## Internal Load Balancing & Autoscaling
-Our first step here is to create an AMI (Amazon Machine Image) of our 
+
+Our first step here is to create an AMI (Amazon Machine Image) of our
 app tier instance. This is basically an image of our instance that we can use to lauch new instances that will have exactly the same configuration as our running instance. To get this done, on my EC2 dashboard I select the app tier instanceand under the Actions drop-down options I select Image and templates and Create Image.
 
 ![create AMI](./imgs/create_ami.JPG)
@@ -360,6 +361,7 @@ We can find the new image by navigating to AMIs under Images in the left-side me
 ![ami](./imgs/ami_image.JPG)
 
 ### Target Group
+
 Next we want to create our target group which we will use in conjunction with our load balancer. The target group is group of resources ( in this case our app tier instances) that the load balancer directs incoming traffic to. Navigate to the left hand menu on our EC2 dashboard again and towards the bottom select Target Groups and use the Create target group button.
 
 ![create target group](./imgs/create_tg.JPG)
@@ -375,6 +377,7 @@ We will not register any targets yet so I click on the Create target group butto
 ![complete target group](./imgs/create_tg3.JPG)
 
 ### Internal Load Balancer
+
 To create our load balancer we navigate again to the left had side of our EC2 dashboard and select Load Balancers. Click on the Create load balancer button.
 
 ![create load balancer](./imgs/create_lb.JPG)
@@ -387,7 +390,7 @@ For the Basic configuration, provide a load balancer name and select the Interna
 
 ![lb config](./imgs/create_lb3.JPG)
 
-Select the availability zones and private subnets for the app tier. Select the security group we created for the internal load balancer. The load balancer will be listening for HTTP traffic on port 80. Select the target group we just created, this is where the load balancer will forward traffic to. 
+Select the availability zones and private subnets for the app tier. Select the security group we created for the internal load balancer. The load balancer will be listening for HTTP traffic on port 80. Select the target group we just created, this is where the load balancer will forward traffic to.
 
 ![lb config 2](./imgs/create_lb4.JPG)
 
@@ -398,25 +401,55 @@ Leave the other options as default and create the load balancer
 ![lb created](./imgs/create_lb6.JPG)
 
 ### Launch Template
+
 Next we need to create a Launch Template that we will use with our Autoscaling group. On our EC2 dashboard we select Launch Template from the left side menu.
 
 ![create launch template](./imgs/create_lt.JPG)
 
 The launch template will have the following configurations;
-  - Provide an appropriate name for the launch template. 
+
+- Provide an appropriate name for the launch template.
 
 ![create lt 1](./imgs/create_lt1.JPG)
 
-  - Under the Application and OS Images, select the My AMIs tab and the app tier image we created earlier. Select the t2.micro instance type.
+- Under the Application and OS Images, select the My AMIs tab and the app tier image we created earlier. Select the t2.micro instance type.
 
 ![create lt 2](./imgs/create_lt2.JPG)
-  
-  - leave the key pair default as we will not be needing a key pair to access our instances. Select the app tier security group.
+
+- leave the key pair default as we will not be needing a key pair to access our instances. Select the app tier security group.
 
 ![create lt 3](./imgs/create_lt3.JPG)
 
-  - under Advanced details select the IAM instance role we used with our EC2 instance. Leave all other values as default and create the launch template
+- under Advanced details select the IAM instance role we used with our EC2 instance. Leave all other values as default and create the launch template
 
 ![create lt 4](./imgs/create_lt4.JPG)
 
+### Auto Scaling
 
+Now it's time to create our Auto Scaling group. On the EC2 dashboard navigate to Auto Scaling Groups under Auto Scaling on the left hand menu and click Create Auto Scaling group.
+
+![create asg](./imgs/create_autoscaling.JPG)
+
+Provide an appropriate name for your Auto Scaling group and select the launch template we just created and click Next.
+
+![asg config](./imgs/asg_config.JPG)
+
+Under the instance launch options, select the custom VPC and availability zones with our private subnets and click on Next.
+
+![asg config 2](./imgs/asg_config2.JPG)
+
+Here we attach the Auto Scaling group to our load balancer by selecting the load balancer's target group from the drop-down options. We leave all the other default settings and click on Next.
+
+![asg config 3](./imgs/asg_config3.JPG)
+
+Next we configure the Group size by setting our Desired capacity, Min desired capacity and Max desired capacity. We will not be setting up any scaling policies so we click Next.
+
+![asg config 4](./imgs/asg_config4.JPG)
+
+Click the Skip to review button and create Auto Scaling group. If we have configured our load balancer and auto scaling group properly, the auto scaling group should start to launch 2 new instances in our app tier.
+
+![asg created](./imgs/asg_created.JPG)
+
+We can confirm this on our EC2 dashboard. Our original app tier instance is still running hence we will see 3 instances running in our instance dashboard.
+
+![instances launched](./imgs/asg_instances_launched.JPG)
