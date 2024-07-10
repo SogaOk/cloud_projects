@@ -17,7 +17,7 @@ The architecture is laid out as follows;
 
 ## Initial Setup
 
-The application code for this project has been provided and will be downloaded from Github. The next step is to create an s3 bucket where we will upload our code later on.
+The application code for this project has been provided and will be downloaded from Github. The next step is to create an S3 bucket where we will upload our code later on.
 
 ![S3 bucket creation screenshot](./imgs/create_bucket.JPG)
 
@@ -47,7 +47,7 @@ I provide a name tag for the VPC and choose a CIDR range. I click the create VPC
 
 ![create VPC](./imgs/create_vpc2.JPG)
 
-Next, I move on to create the subnets. For this project we will need 6 subnets across two availability zones. Each availability zone will consist of a 1 public subnet and 2 private subnets as shown in the architecture diagram.
+Next, I move on to create the subnets. For this project we will need 6 subnets across two availability zones. Each availability zone will consist of 1 public subnet and 2 private subnets as shown in the architecture diagram.
 I navigate to subnets in my VPC dashboard and use the create subnet button.
 
 ![create subnet](./imgs/create_subnet1.JPG)
@@ -60,7 +60,7 @@ So now I have 3 subnets each across two availability zones.
 
 ![subnets created](./imgs/create_subnet3.JPG)
 
-Now we move on to configure internet access for ur public subnets by creating an internet gateway and attaching it to our VPC. I move to Internet gateways on my VPC Dashboard and click on the Create internet gateway button.
+Now we move on to configure internet access for our public subnets by creating an internet gateway and attaching it to our VPC. I move to Internet gateways on my VPC Dashboard and click on the Create internet gateway button.
 
 ![create IGW](./imgs/create_igw1.JPG)
 
@@ -90,9 +90,9 @@ I repeat this process for the other public subnet. I now have two NAT gateways p
 
 Public IP addresses are billed by AWS so keep this in mind to avoid any surprise costs. You can estimate the cost of your public IPs using the aws pricing calculator [here](https://calculator.aws/#/createCalculator/VPC)
 
-Now we move on to configure our route tables to direct the traffice within our subnets. We will start with a route table for our public subnet
+Now we move on to configure our route tables to direct the traffic within our subnets. We will start with a route table for our public subnet.
 
-From the VPC dashboard I select Route tables from the left hand menu and use the Create route table button
+From the VPC dashboard I select Route tables from the left hand menu and use the Create route table button.
 
 ![create route table](./imgs/create_rt1.JPG)
 
@@ -124,7 +124,7 @@ We will repeat this process to create a route table for each private subnet in o
 
 ![private route table subnet assoc.](./imgs/private_rt1b.JPG)
 
-It's time to create our security groups. I will stress again here that your naming convention will be very important so that you don't get confused later on in the projects. Name your security groups as explicitly as possible. From the VPC dashboard I navigate to Security Groups on the left side menu and click on the Create security group button. Security groups will help us control traffic to the resources in our subnets.
+It's time to create our security groups. I will stress again here that your naming convention will be very important so that you don't get confused later on in the project. Name your security groups as explicitly as possible. From the VPC dashboard I navigate to Security Groups on the left side menu and click on the Create security group button. Security groups will help us control traffic to the resources in our subnets.
 
 ![create sg](./imgs/create_sec_grp1.JPG)
 
@@ -132,7 +132,7 @@ Our first security group is for our internet-facing load balancer. I name the se
 
 ![create sg add rule](./imgs/create_sec_grp2.JPG)
 
-The second security group is for our the instances we will launch in our web tier. We want traffic to the web servers on these instances to come from our internet-facing load balancer. To do this we will add a rule that allows HTTP traffic and select the source as the internet-facing load balancer security group we just created in the previous step. I will also allow HTTP access from my IP so that I can access the instance when we test our setup.
+The second security group is for the instances we will launch in our web tier. We want traffic to the web servers on these instances to come from our internet-facing load balancer. To do this we will add a rule that allows HTTP traffic and select the source as the internet-facing load balancer security group we just created in the previous step. I will also allow HTTP access from my IP so that I can access the instance when we test our setup.
 
 ![create sg web tier](./imgs/create_sec_grp_webtier.JPG)
 
@@ -154,7 +154,7 @@ Next we move on to deploy the database layer for our architecture. To do this I 
 
 ![create db subnet group](./imgs/create_db_subnetgrp.JPG)
 
-Here we provide a name and description for our subnet group and select our custom VPC. Then we select availability zones and the subnets we created for our database layer. We can confirm that we are selecting the right subnets by navigating to our VPC dashboard and viewing the subnet IDs. Once the right selections have been made we click the create button
+Here we provide a name and description for our subnet group and select our custom VPC. Then we select availability zones and the subnets we created for our database layer. We can confirm that we are selecting the right subnets by navigating to our VPC dashboard and viewing the subnet IDs. Once the right selections have been made we click the create button.
 
 ![create db subnet group deets](./imgs/create_db_subnetgrp2.JPG)
 
@@ -180,7 +180,7 @@ Under the availability and durability section we choose the option to create an 
 
 ![create db step 6](./imgs/create_db6.JPG)
 
-Under the additional configuration, provide a database name, leave all other defaults configurations as is and create the database.
+Under the additional configuration, provide a database name, leave all other default configurations as is and create the database.
 
 ![create db step 7](./imgs/create_db7.JPG)
 
@@ -226,7 +226,7 @@ Back on the EC2 dashboard, we can see the new instance. It will take a few minut
 
 ![instance connect](./imgs/instance_connect.JPG)
 
-Select the Session Manager tab and click Connect
+Select the Session Manager tab and click Connect.
 
 ![session manager](./imgs/instance_connect2.JPG)
 
@@ -271,7 +271,7 @@ We can verify that the table was created using the SHOW TABLES; command.
 
 Next we want to insert data into our table with the following command - INSERT INTO transactions (amount,description) VALUES ('400','groceries');
 
-We can verify the data was added to our table by using the following command - SELECT \* FROM transactions;
+We can verify the data was added to our table by using the following command - SELECT * FROM transactions;
 
 ![insert into table and confirm](./imgs/select_from_table.JPG)
 
@@ -311,7 +311,7 @@ Now we will download our code from the S3 bucket onto our instance.
 
 ![download code from s3](./imgs/download_s3.JPG)
 
-After the download is complete, I navigate to the app-tier directory, install the dependencies and start the app
+After the download is complete, I navigate to the app-tier directory, install the dependencies and start the app.
 
 ![start pm2 app](./imgs/pm2_startup.JPG)
 
@@ -327,7 +327,7 @@ Copy and paste the command in the output that is displayed on the terminal.
 
 ![pm2 startup](./imgs/pm2_startup_output.JPG)
 
-After running this command, save the current list of node processes with the following command - pm2 save
+After running this command, save the current list of node processes with the following command - pm2 save.
 
 ![pm2 save](./imgs/pm2_save.JPG)
 
@@ -348,7 +348,7 @@ This will return the data we added to our database earlier. These responses show
 ## Internal Load Balancing & Autoscaling
 
 Our first step here is to create an AMI (Amazon Machine Image) of our
-app tier instance. This is basically an image of our instance that we can use to lauch new instances that will have exactly the same configuration as our running instance. To get this done, on my EC2 dashboard I select the app tier instanceand under the Actions drop-down options I select Image and templates and Create Image.
+app tier instance. This is basically an image of our instance that we can use to lauch new instances that will have exactly the same configuration as our running instance. To get this done, on my EC2 dashboard I select the app tier instance and under the Actions drop-down options I select Image and templates and Create Image.
 
 ![create AMI](./imgs/create_ami.JPG)
 
@@ -362,11 +362,11 @@ We can find the new image by navigating to AMIs under Images in the left-side me
 
 ### Target Group
 
-Next we want to create our target group which we will use in conjunction with our load balancer. The target group is group of resources ( in this case our app tier instances) that the load balancer directs incoming traffic to. Navigate to the left hand menu on our EC2 dashboard again and towards the bottom select Target Groups and use the Create target group button.
+Next we want to create our target group which we will use in conjunction with our load balancer. The target group is a group of resources (in this case our app tier instances) that the load balancer directs incoming traffic to. Navigate to the left hand menu on our EC2 dashboard again and towards the bottom select Target Groups and use the Create target group button.
 
 ![create target group](./imgs/create_tg.JPG)
 
-For the basic configuration maintain the default target type of Instances. Give the target group an appropriate name and leave the default Protocol:Port option of HTTP:80. Select the custom VPC and update the health check path to /health. Click the Next button
+For the basic configuration maintain the default target type of Instances. Give the target group an appropriate name and leave the default Protocol:Port option of HTTP:80. Select the custom VPC and update the health check path to /health. Click the Next button.
 
 ![target group config](./imgs/create_tg1.JPG)
 
@@ -386,7 +386,7 @@ Here we select the create button for the Application Load Balancer as that is th
 
 ![select alb](./imgs/create_lb2.JPG)
 
-For the Basic configuration, provide a load balancer name and select the Internal option under Scheme. Under Network mapping select our custom VPC
+For the Basic configuration, provide a load balancer name and select the Internal option under Scheme. Under Network mapping select our custom VPC.
 
 ![lb config](./imgs/create_lb3.JPG)
 
@@ -394,7 +394,7 @@ Select the availability zones and private subnets for the app tier. Select the s
 
 ![lb config 2](./imgs/create_lb4.JPG)
 
-Leave the other options as default and create the load balancer
+Leave the other options as default and create the load balancer.
 
 ![create lb](./imgs/create_lb5.JPG)
 
@@ -420,7 +420,7 @@ The launch template will have the following configurations;
 
 ![create lt 3](./imgs/create_lt3.JPG)
 
-- under Advanced details select the IAM instance role we used with our EC2 instance. Leave all other values as default and create the launch template
+- under Advanced details select the IAM instance role we used with our EC2 instance. Leave all other values as default and create the launch template/.
 
 ![create lt 4](./imgs/create_lt4.JPG)
 
@@ -459,9 +459,9 @@ We will update the nginx.conf file from the github repo provided for the project
 
 ![update nginx.conf](./imgs/nginx_conf.JPG)
 
-We upload this file and the application-code/web-tie folder to our S3 bucket.
+We upload this file and the application-code/web-tier folder to our S3 bucket.
 
-![upload to se](./imgs/s3_uplaod_webtier.JPG)
+![upload to s3](./imgs/s3_uplaod_webtier.JPG)
 
 To deploy our web tier instance, we launch an instance in one of our public subnets. We follow the same process as we did when we launched our app tier instance, however we will be deploying this instance in one of our public subnets. We will also enable the auto-assign public IP.
 
@@ -566,6 +566,43 @@ Provide the launch template name and under Application and OS Images select the 
 ![web tier launch template 3](./imgs/web_tier-lt3.JPG)
 
 ![web tier launch template 4](./imgs/web_tier-lt4.JPG)
+
+Now we get to the last piece of our project, the Autoscaling group for our web tier instances. Navigate to Auto Scaling Groups on our EC2 dashboard and Create Auto Scaling group. Provide a name for the autoscaling group and select the newly created launch template. Click on Next
+
+![web tier asg](./imgs/webtier_asg.JPG)
+
+Select our custom VPC, availability zones and public subnets and click Next
+
+![web tier asg 2](./imgs/webtier_asg2.JPG)
+
+Attach the autoscaling group to our internet facing load balancer by selecting the target group for the web tier load balancer
+
+![web tier asg 3](./imgs/webtier_asg3.JPG)
+
+Select the check box to enable Elastic Load Balancing health checks and click on Next.
+
+![web tier asg 4](./imgs/webtier_asg4.JPG)
+
+Set the desired, minimum and maximum capacity under Group size and Scaling. We will not configure any scaling policies. Skip to review and create Auto Scaling group.
+
+![web tier asg 5](./imgs/webtier_asg5.JPG)
+
+The Autoscaling group is created and it should start to deploy instances in a few moments in line with our configuration. To test the autoscaling group we can manually delete an instance. The autoscaling group should deploy a new instance to replace the terminated instance.
+
+![Auto scaling group creatd](./imgs/web_asg_created.JPG)
+
+![web tier asg test](./imgs/asg_test.JPG)
+
+To test our entire configuration, we can copy our internet-facing load balancer's DNS name into our browser and it should deliver our web application page to us.
+
+![external lb dns](./imgs/external_lb_dns.JPG)
+
+![load balancer test](./imgs/load_balancer_test.JPG)
+
+![load balancer test 2](./imgs/load_balancer_test2.JPG)
+
+I have been able to successfully deploy a three tier web architecture in this robust project that provided hands-on experience with a number of AWS services, providing valuable experience on how these services integrate with each other to provide secure, scalable and highly available cloud solutions. ☁ 😎 😊
+
 
 
 
