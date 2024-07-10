@@ -545,5 +545,29 @@ Skip register targets and create target group.
 
 ![web tier tg 4](./imgs/web_tier_tg4.JPG)
 
+We can create our external facing load balancer now. On the EC2 dashboard navigate to Load Balancers and click Create load balancer. 
+
+We provide a load balancer name, keep the internet facing scheme, select our custom VPC, availability zones and public subnets. 
+
+We also select the security group we created for the external load balancer earlier. Protocol will be HTTP and the load balancer will be listening on port 80. We will select our newly created web tier target group for use with the load balancer. Click on Create load balancer.
+
+![create load balancer](./imgs/create_externallb.JPG)
+
+![create load balancer 2](./imgs/create_externallb1.JPG)
+
+We will need to create a launch template that we will use with our auto scaling group. We navigate to Launch Template on our EC2 dashboard and click the Create launch template button.
+
+Provide the launch template name and under Application and OS Images select the web tier instance AMI under the My AMIs tab. Instance type, Key pair and subnet settings should be the same as for our internal laod balancer. Select the web tier security group and under Advanced details choose the IAM role we created for our instances. Create launch template.
+
+![web tier launch template](./imgs/web_tier-lt.JPG)
+
+![web tier launch template 2](./imgs/web_tier-lt2.JPG)
+
+![web tier launch template 3](./imgs/web_tier-lt3.JPG)
+
+![web tier launch template 4](./imgs/web_tier-lt4.JPG)
+
+
+
 
 
