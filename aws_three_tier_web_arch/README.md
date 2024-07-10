@@ -453,3 +453,97 @@ Click the Skip to review button and create Auto Scaling group. If we have config
 We can confirm this on our EC2 dashboard. Our original app tier instance is still running hence we will see 3 instances running in our instance dashboard.
 
 ![instances launched](./imgs/asg_instances_launched.JPG)
+
+## Web Tier Instance Deployment
+We will update the nginx.conf file from the github repo provided for the project. We will be adding our internal load balancer's DNS entry to the file.
+
+![update nginx.conf](./imgs/nginx_conf.JPG)
+
+We upload this file and the application-code/web-tie folder to our S3 bucket.
+
+![upload to se](./imgs/s3_uplaod_webtier.JPG)
+
+To deploy our web tier instance, we launch an instance in one of our public subnets. We follow the same process as we did when we launched our app tier instance, however we will be deploying this instance in one of our public subnets. We will also enable the auto-assign public IP.
+
+![launch web tier instance](./imgs/create_webtier_instance.JPG)
+
+![launch web tier 1](./imgs/create_webtier_instance2.JPG)
+
+![launch web tier 2](./imgs/create_webtier_instance3.JPG)
+
+Now we will connect to our instance using Session Manager, the same way we connected to our app tier instance.
+
+![connect to web tier instance](./imgs/connect_webtier_instance.JPG)
+
+![session manager](./imgs/connect_webtier_instance2.JPG)
+
+Once connected we can switch to the ec2-user and test the connectivity of our instance by pinging the google.com DNS server.
+
+![check connectivity](./imgs/webtier_ping.JPG)
+
+We can now install the required components to run our front-end application. We start by installing NVM and node.
+
+![install nvm and node](./imgs/install_nvm_node_webtier.JPG)
+
+Then we download our web tier code from our S3 bucket.
+
+![download from s3](./imgs/s3_download_webtier.JPG)
+
+Navigate to the web-layer folder and create the build folder for the react app so we can serve our code.
+
+![npm build](./imgs/npm_build_webserver.JPG)
+
+We will be using Nginx as a web server that we will configure to serve our application on port 80, as well as to help direct our API calls to the internal load balancer
+
+![install nginx](./imgs/nginx_install.JPG)
+
+Now we will configure Nginx. We navigate to the Nginx configuration file and list the files in the directory. 
+
+![nginx folder list](./imgs/copy_nginx_from_s3.JPG)
+
+We will delete the nginx.conf file and replace it with the one we uploaded to S3.
+
+![replace nginx.conf file](./imgs/s3_nginx_replace.JPG)
+
+The next step is to restart Nginx. Then we make sure Nginx has permission to access our files. Then we check ensure that Nginx starts on boot. We run the following commands;
+
+  - sudo service nginx restart
+  - chmod -R 755 /home/ec2-user
+  - sudo chkconfig nginx on
+
+![restart nginx](./imgs/nginx_restart.JPG)
+
+We can confirm our front end application is deployed by placing the public IP address of our EC2 web tier instance in our browser.
+
+![web tier ip](./imgs/confirm_frontend_ip.JPG)
+
+![front end app](./imgs/confirm_frontend_ip2.JPG)
+
+![front end db](./imgs/confirm_frontend_ip3.JPG)
+
+## External Load Balancer & Autoscaling
+
+We will create an AMI for our web tier now following the same process we did for our app tier.
+
+![create AMI](./imgs/web_tier_ami.JPG)
+
+![create AMI 2](./imgs/web_tier_ami2.JPG)
+
+![create AMI 3](./imgs/web_tier_ami3.JPG)
+
+We will create our target group to use with our external load balancer. Navigate to Target Group on the EC2 dashboard and click on Create Target group. Select Instances as the target type and give the target group a name.
+
+![create target group](./imgs/web_tier_tg.JPG)
+
+Set the protocol to HTTP and the port to 80 and select our custom VPC as usual. Set the health check path to /health.
+
+![web tier tg config](./imgs/web_tier_tg2.JPG)
+
+Skip register targets and create target group.
+
+![web tier tg 3](./imgs/web_tier_tg3.JPG)
+
+![web tier tg 4](./imgs/web_tier_tg4.JPG)
+
+
+
