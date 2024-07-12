@@ -139,11 +139,85 @@ We provide a name for our launch template and a version description if desired. 
 
  ![launch template config 4](./imgs/create_lt4.JPG)
 
- Leave all the other default configuration settings and move down to the Advanced details section. Scroll down to the User data section. Here we will add a bash script to install apache web servers on our instances. We can now click the Create launch template button.
+Leave all the other default configuration settings and move down to the Advanced details section. Scroll down to the User data section. Here we will add a bash script to install apache web servers on our instances. We can now click the Create launch template button.
 
  ![launch template config 5](./imgs/create_lt5.JPG)
 
  ![launch template created](./imgs/lt_created.JPG)
+
+## Autoscaling Group
+It's time to create our Autoscaling group and verify that our architecture is working as required. We navigate to Autoscaling Groups on the EC2 dashboard and click Create Auto Scaling group.
+
+![create autoscaling group](./imgs/create_asg.JPG)
+
+Provide a name for the auto scaling group and select the launch template we created in the previous step. Under the version select Latest(1) as the value. This will enable our auto scaling group to select the latest version of our launch template if any changes are made to it. Click Next.
+
+![asg config](./imgs/create_asg1.JPG)
+
+Select the custom VPC and availability zones/subnets you want your instances to be launched in. Here we select our private instances so as to prevent direct access to our web servers from the internet. Click Next
+
+![asg config 2](./imgs/create_asg2.JPG)
+
+Next select the option to Attach an existing load balancer. We will select the target group we created earlier to link our autoscaling group to our load balancer. We will leave the default value for the VPC Lattice Integration options and under Health checks we will select the checkbox to Turn on Elastic Load Balancing health checks. Click Next.
+
+![asg config 3](./imgs/create_asg3.JPG)
+
+![asg config 4](./imgs/create_asg4.JPG)
+
+Here we configure the desired, minimum desired and maximum desired capacity for our auto scaling group. We will not be configuring any scaling policies for now, so click Next.
+
+![asg config 5](./imgs/create_asg5.JPG)
+
+![asg config 6](./imgs/create_asg6.JPG)
+
+We can skip notifications and click Next.
+
+![asg config 7](./imgs/create_asg7.JPG)
+
+We can add tags here to identify the instances launched by the auto scaling group.
+
+![asg config 8](./imgs/create_asg8.JPG)
+
+We review our configuration and click the Create Auto Scaling group button.
+
+![asg create](./imgs/create_asg9.JPG)
+
+Our Auto Scaling group is created and starts to provision our web server instances in line with our configuration. So we should see 2 Ec2 instances being launched on our EC2 dashboard.
+
+![asg created and deploying](./imgs/asg_created.JPG)
+
+![instances launching](./imgs/asg_check.JPG)
+
+If we look at our target group, we will find that the two new instances are registered as targets in our target group. This shows that the application load balancer will be forwarding HTTP traffic to both of these web server instances.
+
+![registered targets](./imgs/tg_check.JPG)
+
+We can confirm that our load balancer is forwarding HTTP traffic to our two instances by putting our load balancer DNS name into our browser and comparing the IP addresses from our browser to the IP addresses of our ec2 instances.
+
+![load balancer dns](./imgs/lb_dnsname.JPG)
+
+![server check 1](./imgs/webserver_ip1.JPG)
+
+![browser check](./imgs/webcheck1.JPG)
+
+![server check 2](./imgs/webserver_ip2.JPG)
+
+![browser check 2](./imgs/webcheck2.JPG)
+
+To check the self-healing capability of our architecture we can terminate one of our web server instances. The auto scaling group should deploy a new instance to replace the terminated instance once it has detected that there is an unhealthy instance.
+
+![terminate instance](./imgs/terminate%20instance.JPG)
+
+![terminate instance 2](./imgs/terminate%20instance2.JPG)
+
+![terminate instance 3](./imgs/terminate%20instance3.JPG)
+
+![asg deploying new instance](./imgs/asg_deploying.JPG)
+
+![new instance deploying](./imgs/new_instance_launching.JPG)
+
+![asg updated](./imgs/asg_updated.JPG)
+
 
 
 
