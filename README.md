@@ -114,3 +114,36 @@ Now we return to the application load balancer creation screen and refresh our t
 ![complete lb config](./imgs/create_lb_final.JPG)
 
 ![load balancer completed](./imgs/load_balancer_created.JPG)
+
+## Launch Template
+Now we will set up our Launch Template. The launch template will be used with our Autoscaling group to deploy EC2 instances with our desired configuration in the event that any of our running instances goes down. Still on our EC2 dashboard, we navigate to Launch Templates in the left side Menu and click the Create launch template button.
+
+![start launch template creation](./imgs/create_lt.JPG)
+
+We provide a name for our launch template and a version description if desired. Under Application & OS images we select the Quick Start tab and select Amazon Linux and the Amazon Linux 2023 AMI from the drop-down options.
+
+![launch template config](./imgs/create_lt1.JPG)
+
+![launch template config 2](./imgs/create_lt2.JPG)
+
+ - Select the t2.micro instance type
+ - choose Don't include in launch template under Key pair
+ - Under Network settings choose Don't include in launch template for Subnet
+
+ ![launch template config 3](./imgs/create_lt3.JPG)
+
+ - Choose Create security group under Firewall
+ - Provide a security group name and description
+ - Select our custom VPC
+ - Add an inbound security group rule to allow HTTP traffic on port 80 from the load balancer security group. This will allow HTTP traffic from only the application load balancer security group to our instances.
+
+ ![launch template config 4](./imgs/create_lt4.JPG)
+
+ Leave all the other default configuration settings and move down to the Advanced details section. Scroll down to the User data section. Here we will add a bash script to install apache web servers on our instances. We can now click the Create launch template button.
+
+ ![launch template config 5](./imgs/create_lt5.JPG)
+
+ ![launch template created](./imgs/lt_created.JPG)
+
+
+
