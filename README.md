@@ -55,3 +55,62 @@ There is one public route table that includes a route that points to the interne
 ![public rt route](./imgs/public_rt.JPG)
 
 ![public rt subnet association](./imgs/public_rt2.JPG)
+
+## Application Load Balancer & Target Group
+Now that our VPC is set up, it is time to start deploying our resources. We will start off with our Application Load Balancer. From our EC2 dashboard, we navigate on Load Balancers at the lower end of the left-hand menu and click the Create load balancer button.
+
+![create load balancer](./imgs/create_lb.JPG)
+
+We click the create button for Application Load Balancer on the Compare and select load balancer type screen
+
+![load balancer type](./imgs/create_lb2.JPG)
+
+Provide an appropriate name for the load balancer and keep the default scheme of Internet-facing as we want our load balancer to accept traffic from the internet. Leave the default IP address type of IPv4 unchanged.
+
+![load balancer config](./imgs/create_lb3.JPG)
+
+Under the Network mapping configuration, select our new VPC and under Mappings select our new public subnets.
+
+![load balancer config contd](./imgs/create_lb4.JPG)
+
+Under Security groups, we will be creating a new security group for our load balances. So we click on the link to take us to the security groups dashboard.
+
+![create load balancer security group](./imgs/create_sg.JPG)
+
+On the Security Groups dashboard click the Create security group button. Provide a name for the security group and a description. Select our VPC so that the security group is deployed into our VPC. Add an inbound rule to allow HTTP traffic from anywhere. Leave the default outbound rules and click the create security group button.
+
+![security grp config](./imgs/create_sg2.JPG)
+
+![security grp config contd](./imgs/create_sg3.JPG)
+
+![security grp config 2](./imgs/create_sg4.JPG)
+
+We navigate back to our application load balancer creation screen and click the refresh button to refresh the list of security groups. We can now select the security group we just created.
+
+![select lb security group](./imgs/create_lb5.JPG)
+
+Under our Listeners and routing configuration, we will leave the protocol and port as HTTP:80. We have not created our target group yet so we click on the Create target group link. Our load balancer will forward traffic to the instances in our target group.
+
+![create target group](./imgs/create_tg.JPG)
+
+On the target group configuration screen leave the target type as Instances since our load balancer will be forwarding traffic to our EC2 instances. Provide a name for the target group.
+
+![target group configuration](./imgs/create_tg2.JPG)
+
+Maintain the default protocol and port values of HTTP and 80 and ensure that our custom VPC is selected. Leave all other values as default and click the Next button.
+
+![target group config contd](./imgs/create_tg3.JPG)
+
+We will not register any targets for now and we click on the Create target group button.
+
+![target group created](./imgs/create_tg4.JPG)
+
+![tg created contd](./imgs/load_balancer_tg.JPG)
+
+Now we return to the application load balancer creation screen and refresh our target group selection. We can now select our new target group. We will leave all other values as default and click the create load balancer button.
+
+![select target group](./imgs/select_tg_for_lb.JPG)
+
+![complete lb config](./imgs/create_lb_final.JPG)
+
+![load balancer completed](./imgs/load_balancer_created.JPG)
