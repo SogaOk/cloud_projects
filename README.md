@@ -268,5 +268,8 @@ Our autoscaling group starts to launch a new instance and we can go to our EC2 d
 
 ![new browser message](./imgs/modify_lt7.JPG)
 
+## Scaling Policies
+
+
 
 
