@@ -218,6 +218,55 @@ To check the self-healing capability of our architecture we can terminate one of
 
 ![asg updated](./imgs/asg_updated.JPG)
 
+## Modifying the Autoscaling Group & Launch Template
+In the event that we want to change the number or instances we have running or we want to modify our launch configuration, we can achieve this by editing our autoscaling group settings or by modifying our launch template.
+
+To edit the autoscaling group, from the Auto Scaling Groups pane on our EC2 dashboard, we select our autoscaling group and from the Actions drop down options select Edit.
+
+![modify asg](./imgs/modify_asg.JPG)
+
+We can for instance change our desired capacity from 2 to 1. The result of this will be that the autoscaling group will take one instance out of operation to match our updated configuration. After making desired changes we scroll down and click the update button.
+
+![modify asg 1](./imgs/modify_asg1.JPG)
+
+![modify asg 2](./imgs/modify_asg3.JPG)
+
+If we take a look at the activity tab of our autoscaling group, we will see in a few moments that one of our instances is being terminated and that the connection draining is in progress. This will take a few minutes and on our EC2 dashboard we will see one of our web server instances begins to shutdown.
+
+![modify asg 3](./imgs/modify_asg4.JPG)
+
+![modify asg 4](./imgs/modify_asg5.JPG)
+
+Once the shutdown process is complete we will be left with one running instance of our webserver.
+
+![modify asg complete](./imgs/modify_asg_success.JPG)
+
+![modify asg ec2](./imgs/modify_asg_ec2.JPG)
+
+If we want to modify our launch template, we move to the launch template dashboard and select our launch template. From the Actions drop down option select Modify template(Create new version).
+
+![modify launch template](./imgs/modify_lt.JPG)
+
+We will modify our instance type from a t2.micro to a t2.nano and also modify our user data script to display a new message in our browser when we access our webserver through the load balancer. Once we are done we can click the Create template version button.
+
+![modify launch template 1](./imgs/modify_lt1.JPG)
+
+![modify launch template 2](./imgs/modify_lt2.JPG)
+
+![modify launch template 3](./imgs/modify_lt3.JPG)
+
+To see our changes take effect, we can go back and modify our autoscaling group configuration using the same steps we used previously. We will change our desired capacity from 1 to 2. 
+This will cause our autoscaling group to launch a new instance to meet our new configuration. This new instance will be configured based on the new version of our launch template. This is because we selected Latest under version when we were creating our autoscaling group. This ensures that anytime our launch template is updated, our autoscaling group will always work with the latest version of our launch template.
+
+![modify asg](./imgs/modify_lt4.JPG)
+
+Our autoscaling group starts to launch a new instance and we can go to our EC2 dashboard and confirm that the new instance has a t2.nano instance type. We can also put our load balancer DNS name in our browser to see our modified server message.
+
+![modify asg 1](./imgs/modify_lt5.JPG)
+
+![modify asg 2](./imgs/modify_lt6.JPG)
+
+![new browser message](./imgs/modify_lt7.JPG)
 
 
 
