@@ -9,9 +9,9 @@ This project implements autoscaling for web servers deployed on EC2 instances in
  - Autoscaling Groups 
  - Cloudwatch Alarms
 
-The referene architecture can be seen below
+The referene architecture can be seen below;
 
-![Web server autoscaling diagram]()
+![Web server autoscaling diagram](./webserver_autoscaling.jpeg)
 
 ## Custom VPC
 We start of the project by creating a custom VPC where we will deploy our resources. We navigate to the VPC dashboard in our AWS account.
