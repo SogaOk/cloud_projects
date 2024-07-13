@@ -9,7 +9,7 @@ This project implements autoscaling for web servers deployed on EC2 instances in
  - Autoscaling Groups 
  - Cloudwatch Alarms
 
-The referene architecture can be seen below;
+The reference architecture can be seen below;
 
 ![Web server autoscaling diagram](./webserver_autoscaling.jpeg)
 
@@ -26,7 +26,7 @@ Here we will configure our VPC settings and get a preview of what our VPC will l
 
 ![VPC settings](./imgs/vpc_settings1.JPG)
 
-For this project we want 3 availability zones for high availability of our instances. We also want to configure 3 public, 3 private subnets and a NAT Gateway. Our instances will run in our private subnet so that they are not accessible from the internet. Our NAT gateway will be deployed in a public subnet to give our instances access to the internet. We can deploy a NAT gateway in each availability zone but note that there is a charge for using NAT gateways and one will suffice for this project. We will not be making use of an S3 Gateway so we select None. Click Create VPC.
+For this project we want 3 availability zones for high availability of our instances. We also want to configure 3 public, 3 private subnets and a NAT Gateway. Our instances will run in our private subnets so that they are not accessible from the internet. Our NAT gateway will be deployed in a public subnet to give our instances access to the internet. We can deploy a NAT gateway in each availability zone but note that there is a charge for using NAT gateways and one will suffice for this project. We will not be making use of an S3 Gateway so we select None. Click Create VPC.
 
 ![VPC settings 2](./imgs/vpc_settings2.JPG)
 
@@ -57,11 +57,11 @@ There is one public route table that includes a route that points to the interne
 ![public rt subnet association](./imgs/public_rt2.JPG)
 
 ## Application Load Balancer & Target Group
-Now that our VPC is set up, it is time to start deploying our resources. We will start off with our Application Load Balancer. From our EC2 dashboard, we navigate on Load Balancers at the lower end of the left-hand menu and click the Create load balancer button.
+Now that our VPC is set up, it is time to start deploying our resources. We will start off with our Application Load Balancer. From our EC2 dashboard, we navigate to Load Balancers at the lower end of the left-hand menu and click the Create load balancer button.
 
 ![create load balancer](./imgs/create_lb.JPG)
 
-We click the create button for Application Load Balancer on the Compare and select load balancer type screen
+We click the create button for Application Load Balancer on the Compare and select load balancer type screen.
 
 ![load balancer type](./imgs/create_lb2.JPG)
 
@@ -154,7 +154,7 @@ Provide a name for the auto scaling group and select the launch template we crea
 
 ![asg config](./imgs/create_asg1.JPG)
 
-Select the custom VPC and availability zones/subnets you want your instances to be launched in. Here we select our private instances so as to prevent direct access to our web servers from the internet. Click Next
+Select the custom VPC and availability zones/subnets you want your instances to be launched in. Here we select our private instances so as to prevent direct access to our web servers from the internet. Click Next.
 
 ![asg config 2](./imgs/create_asg2.JPG)
 
@@ -182,7 +182,7 @@ We review our configuration and click the Create Auto Scaling group button.
 
 ![asg create](./imgs/create_asg9.JPG)
 
-Our Auto Scaling group is created and starts to provision our web server instances in line with our configuration. So we should see 2 Ec2 instances being launched on our EC2 dashboard.
+Our Auto Scaling group is created and starts to provision our web server instances in line with our configuration. So we should see two EC2 instances being launched on our EC2 dashboard.
 
 ![asg created and deploying](./imgs/asg_created.JPG)
 
@@ -192,7 +192,7 @@ If we look at our target group, we will find that the two new instances are regi
 
 ![registered targets](./imgs/tg_check.JPG)
 
-We can confirm that our load balancer is forwarding HTTP traffic to our two instances by putting our load balancer DNS name into our browser and comparing the IP addresses from our browser to the IP addresses of our ec2 instances.
+We can confirm that our load balancer is forwarding HTTP traffic to our two instances by putting our load balancer DNS name into our browser and comparing the IP addresses from our browser to the IP addresses of our EC2 instances.
 
 ![load balancer dns](./imgs/lb_dnsname.JPG)
 
@@ -271,11 +271,11 @@ Our autoscaling group starts to launch a new instance and we can go to our EC2 d
 ## Scaling Policies
 In order to make our auto scaling groups more responsive to changes in demand, we can configure scaling policies which work with CloudWatch to track specific metrics. When specific thresholds are reached, Cloudwatch alarms are triggered and preset actions are taken. We will illustrate this using simple scaling policies.
 
-From the Auto Scaling Groups dashboard, we select our Autoscaling group and move to the Automatic scaling tab. We click on the Create dynamic scaling policy button
+From the Auto Scaling Groups dashboard, we select our Autoscaling group and move to the Automatic scaling tab. We click on the Create dynamic scaling policy button.
 
 ![create scaling policy](./imgs/scaling_policies.JPG)
 
-Under Policy type we select Simple scaling and proivde a name for the policy. Under Cloudwatch alarm we click on the Create a CloudWatch alarm link.
+Under Policy type we select Simple scaling and proivde a name for the policy. Under CloudWatch alarm we click on the Create a CloudWatch alarm link.
 
 ![create scaling policy](./imgs/scaling_policies2.JPG)
 
