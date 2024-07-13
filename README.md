@@ -269,6 +269,79 @@ Our autoscaling group starts to launch a new instance and we can go to our EC2 d
 ![new browser message](./imgs/modify_lt7.JPG)
 
 ## Scaling Policies
+In order to make our auto scaling groups more responsive to changes in demand, we can configure scaling policies which work with CloudWatch to track specific metrics. When specific thresholds are reached, Cloudwatch alarms are triggered and preset actions are taken. We will illustrate this using simple scaling policies.
+
+From the Auto Scaling Groups dashboard, we select our Autoscaling group and move to the Automatic scaling tab. We click on the Create dynamic scaling policy button
+
+![create scaling policy](./imgs/scaling_policies.JPG)
+
+Under Policy type we select Simple scaling and proivde a name for the policy. Under Cloudwatch alarm we click on the Create a CloudWatch alarm link.
+
+![create scaling policy](./imgs/scaling_policies2.JPG)
+
+We are taken to the CloudWatch dashboard and we click the Select metric button
+
+![create scaling policy](./imgs/scaling_policies3.JPG)
+
+We select EC2 from the list of metrics displayed.
+
+![create scaling policy](./imgs/scaling_policies4.JPG)
+
+We select By Auto Scaling Group next.
+
+![create scaling policy](./imgs/scaling_policies5.JPG)
+
+We want to use the CPUUtilization metric so we click the check box beside the CPUUtilization and click on the Select metric button.
+
+![create scaling policy](./imgs/scaling_policies6.JPG)
+
+Next we specify the conditions for the CloudWatch alarm. We want the CloudWatch alarm to be triggered when our instance CPUUtilization is greater than or equal to 70%. When the conditions are set we click on Next
+
+![create scaling policy](./imgs/scaling_policies7.JPG)
+
+We will not be configuring any actions here as we will do so within the Scaling policy dashboard so we click on the Remove button and click on Next.
+
+![create scaling policy](./imgs/scaling_policies8.JPG)
+
+We provide a name for the alarm and click on Next. We scroll down to the bottom of the review page and click Create alarm.
+
+![create scaling policy](./imgs/scaling_policies9.JPG)
+
+![create scaling policy](./imgs/scaling_policies10.JPG)
+
+
+Once the alarm is created we go back to our Auto Scaling dashboard and continue creating our scaling policy. We click on the refresh button and select our newly created CloudWatch alarm from the drop down options. We add 1 capacity unit as the action to be taken once our CloudWatch alarm is triggered.
+
+![create scaling policy](./imgs/scaling_policies11.JPG)
+
+![create scaling policy](./imgs/scaling_policies12.JPG)
+
+We can test our scaling policy by manually triggering the CloudWatch alarm. Once the alarm is triggered, our Autoscaling group should launch a new instance in accordance with our scaling policy configuration. To trigger the CloudWatch alarm we open our Cloudshell terminal by clicking the CloudShell icon on our page or using the search bar to navigate to CloudShell.
+
+![create scaling policy](./imgs/scaling_policies13.JPG)
+
+Once the terminal is open we run the following command to trigger our CloudWatch alarm.
+
+aws cloudwatch set-alarm-state --alarm-name "Scale Out" --state-value ALARM --state-reason "Testing"
+
+We can check our current alarm state in the CloudWatch dashboard. Once we run the command our alarm state will change to In alarm.
+
+![alarm state](./imgs/cloudwatch_alarm_before.JPG)
+
+![trigger alarm](./imgs/scaling_policies14.JPG)
+
+The Cloudwatch alarm is now In alarm and our auto scaling group has started to deploy a new instance.
+
+![alarm state in alarm](./imgs/scaling_policies16.JPG)
+
+![asg launching](./imgs/scaling_policies15.JPG)
+
+![asg launching](./imgs/scaling_policies17.JPG)
+
+We have now successfully implemented a self-healing cloud architecture where unhealthy instances are replaced by our autoscaling group and we can scale out or scale in our instances based on selected CloudWatch metrics. ☁😎😊
+
+
+
 
 
 
